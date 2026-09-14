@@ -1,0 +1,21 @@
+#!/bin/bash
+#SBATCH --job-name=swapped_var_collect
+#SBATCH --output=swapped_var_collect.out
+#SBATCH --error=swapped_var_collect.err
+
+#SBATCH --account=pi-pmuralidhar
+#SBATCH --partition=caslake
+
+#SBATCH --time=00:25:00
+
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem-per-cpu=5000
+
+#SBATCH --mail-type=FAIL  # Email notification options: ALL, BEGIN, END, FAIL, ALL, NONE
+#SBATCH --mail-user=jcholder@rcc.uchicago.edu
+
+module load R
+cd /project/pmuralidhar/jcholder/mito_nuclear
+
+Rscript swap_var_collect.R
