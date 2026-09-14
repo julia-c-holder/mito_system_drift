@@ -1,0 +1,57 @@
+// Initial random seed:
+5221842672674395880
+
+// RunInitializeCallbacks():
+initializeSex(NULL);
+initializeMutationType(1, 0.5, "f", 0);
+initializeMutationType(2, 0.5, "f", 0);
+initializeGenomicElementType(1, m1, 1);
+initializeGenomicElementType(2, m2, 1);
+initializeChromosome(1, 10, 'HF', symbol='Mito');
+initializeGenomicElement(g1);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0);
+initializeChromosome(2, 100, 'A', symbol='A1');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(3, 100, 'A', symbol='A2');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(4, 100, 'A', symbol='A3');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(5, 100, 'A', symbol='A4');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(6, 100, 'A', symbol='A5');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(7, 100, 'A', symbol='A6');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(8, 100, 'A', symbol='A7');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(9, 100, 'A', symbol='A8');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(10, 100, 'A', symbol='A9');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+initializeChromosome(11, 100, 'A', symbol='A10');
+initializeGenomicElement(g2);
+initializeMutationRate(1e-05);
+initializeRecombinationRate(0.01);
+
+// Starting run at tick <start>:
+1 
+
