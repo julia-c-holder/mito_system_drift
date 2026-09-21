@@ -3,18 +3,19 @@
 initialize() {
 	if (exists("slimgui")) {
 		defineConstant("results_path_base", "~/Desktop/");
-		defineConstant("replicate_id", 5);
+		defineConstant("replicate_id", 400);
 		defineConstant("length_mito", 10);
+		defineConstant("extra", 2);
 	}
 	
-	defineConstant("length_mito", 100); //should I vary?
+	//defineConstant("length_mito", 10); //should I vary?
 	
 	defineConstant("fit_sd", 1); // sd of fitness function
 
 	defineConstant("pop_size", 10000);
 	defineConstant("mut_rate", 10^-5);
 	
-	defineConstant("length_chrom", 90);
+	defineConstant("length_chrom", 99);
 	
 	defineConstant("auto_recomb_rate", 0.01); // approx one crossover per chromosome per meiosis 
 	
@@ -42,7 +43,6 @@ initialize() {
 	m1.convertToSubstitution = F;
 	m2.convertToSubstitution = F;
 	m3.convertToSubstitution = F;
-	m4.convertToSubstitution = F;
 	
 	
 	// all autosomes use the same mutations here; 
