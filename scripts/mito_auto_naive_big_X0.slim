@@ -3,11 +3,12 @@
 initialize() {
 	if (exists("slimgui")) {
 		defineConstant("results_path_base", "~/Desktop/");
-		defineConstant("replicate_id", 5);
+		defineConstant("replicate_id", 400);
 		defineConstant("length_mito", 10);
+		defineConstant("extra", 2);
 	}
 	
-	defineConstant("length_mito", 100); //should I vary?
+	//defineConstant("length_mito", 100); //should I vary?
 	
 	defineConstant("fit_sd", 1); // sd of fitness function
 
@@ -42,7 +43,6 @@ initialize() {
 	m1.convertToSubstitution = F;
 	m2.convertToSubstitution = F;
 	m3.convertToSubstitution = F;
-	m4.convertToSubstitution = F;
 	
 	
 	// all autosomes use the same mutations here; 
