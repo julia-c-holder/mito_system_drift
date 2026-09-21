@@ -1,0 +1,16 @@
+
+rule all:
+
+rule select_reps:
+    input:
+        "results/{rep}/{sample}.csv"
+    output:
+        "results/within/chrom_info/{sample}_{gen}.csv"
+    script:
+        "collect_chrom.R"
+
+rule collect_reps:
+    input:
+        expand("results/within/chrom_info/{sample}_{gen}.csv", sample=config["samples"])
+    output:
+    shell:
