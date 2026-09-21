@@ -1,0 +1,571 @@
+// Keywords: multiple chromosomes
+
+initialize() {
+	if (exists("slimgui")) {
+		defineConstant("results_path_base", "~/Desktop/");
+		defineConstant("replicate_id", 5);
+		defineConstant("length_mito", 10);
+	}
+	
+	defineConstant("length_mito", 100); //should I vary?
+	
+	defineConstant("fit_sd", 1); // sd of fitness function
+
+	defineConstant("pop_size", 10000);
+	defineConstant("mut_rate", 10^-5);
+	
+	defineConstant("length_chrom", 90);
+	
+	defineConstant("auto_recomb_rate", 0.01); // approx one crossover per chromosome per meiosis 
+	
+	defineConstant("mito_scaling", 1); //range from 0.1 to 10, which scales importance of mito contribution from 0.1% to 10%
+	//might be useful later
+	defineConstant("intersex_corr", 0.9);
+	
+	defineConstant("burn_in", 100000); //Drop this for testing; increase for actual runs 
+	
+	// #### set up genome #####
+	
+	initializeSex();
+	initializeMutationType("m1", 0.5, "f", 0.0); //mitochondrial mutations
+	initializeMutationType("m2", 0.5, "f", 0.0); //auto muts
+	
+	
+	//I like to be able to see the types!
+	m1.color = "darkred";
+	m2.color = "cornflowerblue";
+	
+	//can explain why I do this; basically, not allowing substitutions slows things downs
+	//but accounting for substitutions in fitness calcs is also slow
+	//so for certain time periods, turning them off makes sense
+	m1.convertToSubstitution = F;
+	m2.convertToSubstitution = F;
+	
+	
+	// all autosomes use the same mutations here; 
+	// we might want to distinguish them at some point
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElementType("g2", m2, 1.0);
+	
+	
+	//the order of each set-up is necessary in SLIM 5! First chromosome, then genomic element, etc. 
+	// ^ I'm still learning SLiM 5 as you can see
+	
+	// MITOCHONDRIA
+	initializeChromosome(1, length_mito, type="HF", symbol="Mito");
+	initializeGenomicElement(g1);
+	initializeMutationRate(mut_rate); //leave the same or change?
+	initializeRecombinationRate(0.0); //no recombination rate in the mito, unclear what it means
+	
+	// AUTOSOMES
+	initializeChromosome(2, length_chrom, type="A", symbol="A1");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(3, length_chrom, type="A", symbol="A2");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(4, length_chrom, type="A", symbol="A3");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(5, length_chrom, type="A", symbol="A4");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(6, length_chrom, type="A", symbol="A5");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(7, length_chrom, type="A", symbol="A6");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(8, length_chrom, type="A", symbol="A7");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(9, length_chrom, type="A", symbol="A8");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(10, length_chrom, type="A", symbol="A9");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	initializeChromosome(11, length_chrom, type="A", symbol="A10");
+	initializeGenomicElement(g2);
+	initializeMutationRate(mut_rate);
+	initializeRecombinationRate(auto_recomb_rate);
+	
+	
+	// ### mutational distribution parameters ###
+	defineConstant("mu", c(0, 0)); //mean of mutation distribution male & female
+	defineConstant("var_u", (0.25*10^-2)); //variance in mutational effects in both sexes
+	defineConstant("cov", intersex_corr*var_u); //covariance between mutational effects in the sexes
+	defineConstant("sigma", matrix(c(var_u,cov,cov,var_u), nrow=2));
+	//note: change intersex_corr between mito and nuclear?
+	
+	// so without a mitochondria and 1000 loci and 10000 individuals
+	// sd of fitness function = 1, sd of phenotypic distribution is about 0.2 for male and female trait
+	// gives sqrt (vs/va) of about 5, which is about human height strength of selection
+	// (aka stabilizing selection is acting, but not too strong)
+	
+	// #### fitness parameters ######
+	defineConstant("optimum", 0); //shared fitness optimum 
+	// can shift this midway through sims to look at adaptation
+	defineConstant("female_sd", fit_sd); //female fitness sd, possibly worth changing these for mito
+	defineConstant("male_sd", fit_sd); //male fitness sd
+	
+	
+	//####### output info ##############
+	
+	// defineConstant("extra", rdunif(1,0,10000000)); // using ids from bash script
+	defineConstant("results_par",results_path_base +"between/"+replicate_id+"/");
+	createDirectory(results_par);
+	defineConstant("results_path", results_path_base +"between/"+replicate_id+"/burnin/");
+	createDirectory(results_path);
+	
+	defineConstant("simulation_info", ("mito_auto_"+replicate_id+"_"+extra+"_"));
+	
+	defineConstant("pheno_file_start", (results_path+simulation_info+"pheno_"));
+	defineConstant("allele_file_start", (results_path+simulation_info+"allele_"));
+	defineConstant("chrom_file", (results_path+simulation_info+"chrom.csv"));
+	defineConstant("sim_file", (results_path+simulation_info+"burnin.csv"));
+	defineConstant("mut_file", (results_path+simulation_info+"muts.csv"));
+	
+	defineConstant("chrom_recording_interval", 100); //CHANGE
+	//below must be multiples of above
+	recording_gens = c(10, burn_in, burn_in+10000, burn_in+20000, burn_in+30000, burn_in+40000, burn_in+50000);
+	defineConstant("pheno_recording_gen", recording_gens);
+	defineConstant("allele_recording_gen", recording_gens);
+	
+	defineConstant("pheno_header", "sex,auto,mito,"+
+	"mito_scaled,pheno");
+	
+	defineConstant("allele_header","id,info,position,"+
+	"origin_time,freq,female_effect,male_effect");
+	
+	defineConstant("chrom_header","cycle,avg_auto_f,avg_mito_f"
+	+"avg_mito_scaled_f,avg_auto_m,avg_mito_m,"+
+	"avg_mito_scaled_m,var_auto_f,var_mito_f,"+
+	"var_mito_scaled_f,var_auto_m,var_mito_m,"+
+	"var_mito_scaled_m,avg_pheno_f,avg_pheno_m"+
+	"var_pheno_f,var_pheno_m,genic_var_auto_f,"+
+	"genic_var_mito_f,genic_var_mito_s_f"+
+	"genic_var_auto_m,genic_var_mito_m,genic_var_mito_s_m"+
+	"cov_mito_f,cov_mito_s_f,cov_auto_f"+
+	"cov_mito_m,cov_mito_s_m,cov_auto_m"+
+	"cov_mito_auto_f,cov_mito_auto_m");
+
+	defineConstant("mut_file_header", "id,freq,e_f,e_m,type");
+	writeFile(mut_file, mut_file_header, append=F);
+}
+
+1 early() { sim.addSubpop("p1", pop_size); }
+
+
+mutation() { //this could be done seperately for the mitochondria
+	// draw mutational effects for new muts
+	effects = rmvnorm(1, mu, sigma);
+	mut.setValue("e_f", effects[0]);
+	mut.setValue("e_m", effects[1]);
+	return T;
+}
+
+
+fitnessEffect() {
+	//could integrate recording loop in here
+	//but it happens so relatively rarely that I doubt it will speed things up too much
+	
+	auto_1_chroms = c(individual.haplosomesForChromosomes("A1"));
+	muts_auto_1 = auto_1_chroms.mutationsOfType(m2);
+	
+	auto_2_chroms = c(individual.haplosomesForChromosomes("A2"));
+	muts_auto_2 = auto_2_chroms.mutationsOfType(m2);
+	
+	auto_3_chroms = c(individual.haplosomesForChromosomes("A3"));
+	muts_auto_3 = auto_3_chroms.mutationsOfType(m2);
+	
+	auto_4_chroms = c(individual.haplosomesForChromosomes("A4"));
+	muts_auto_4 = auto_4_chroms.mutationsOfType(m2);
+	
+	auto_5_chroms = c(individual.haplosomesForChromosomes("A5"));
+	muts_auto_5 = auto_5_chroms.mutationsOfType(m2);
+	
+	auto_6_chroms = c(individual.haplosomesForChromosomes("A6"));
+	muts_auto_6 = auto_6_chroms.mutationsOfType(m2);
+	
+	auto_7_chroms = c(individual.haplosomesForChromosomes("A7"));
+	muts_auto_7 = auto_7_chroms.mutationsOfType(m2);
+	
+	auto_8_chroms = c(individual.haplosomesForChromosomes("A8"));
+	muts_auto_8 = auto_8_chroms.mutationsOfType(m2);
+	
+	auto_9_chroms = c(individual.haplosomesForChromosomes("A9"));
+	muts_auto_9 = auto_9_chroms.mutationsOfType(m2);
+	
+	auto_10_chroms = c(individual.haplosomesForChromosomes("A10"));
+	muts_auto_10 = auto_10_chroms.mutationsOfType(m2);
+	
+	muts_auto_all = c(
+		muts_auto_1,
+		muts_auto_2,
+		muts_auto_3,
+		muts_auto_4,
+		muts_auto_5,
+		muts_auto_6,
+		muts_auto_7,
+		muts_auto_8,
+		muts_auto_9,
+		muts_auto_10
+		);
+	
+	mito_chroms = individual.haplosomesForChromosomes("Mito");
+	muts_mito = c(mito_chroms.mutationsOfType(m1));
+	
+	if (individual.sex == "F"){
+		
+		//the question mark is a shortcut for 'if it exists' basically
+		mut_phenotype_auto = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_f")) else 0.0;
+		mut_phenotype_mito = size(muts_mito) ? sum(muts_mito.getValue("e_f")) else 0.0;
+		
+		mut_phenotype_mito_scaled = mito_scaling*mut_phenotype_mito; //not sure if this scaling is necessary, we'll see
+		
+		phenotype = mut_phenotype_auto + mut_phenotype_mito_scaled;
+		
+		// technically you don't need the last bit as everything is relative, 
+		// but I like to look at the fitness values myself and see how bad/good they are
+		fitness = dnorm(asFloat(phenotype), optimum, female_sd)*sqrt(2*PI)*female_sd;
+	
+	}
+	
+	else{//individual is male
+		
+		mut_phenotype_auto = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
+		
+		mut_phenotype_mito = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
+		
+		mut_phenotype_mito_scaled = mito_scaling*mut_phenotype_mito;
+		
+		phenotype = mut_phenotype_auto + mut_phenotype_mito_scaled;
+		
+		fitness = dnorm(asFloat(phenotype), optimum, male_sd)*sqrt(2*PI)*male_sd;
+	
+	}
+	
+	return fitness;
+
+}
+
+2: late() { //recording loop
+	
+	if ((sim.cycle == burn_in) | (sim.cycle == 10)
+			| (sim.cycle >= burn_in & sim.cycle<(burn_in + 1000))){ //record at 10 and burn in 
+		
+		allele_file = allele_file_start+sim.cycle+".csv";
+		pheno_file = pheno_file_start+sim.cycle+".csv";
+		
+		genic_var_auto_female = 0;
+		genic_var_auto_male = 0;
+		genic_var_mito_female = 0;
+		genic_var_mito_male = 0;
+		genic_var_mito_scaled_female = 0;
+		genic_var_mito_scaled_male = 0;
+		
+		//######### ALLELE LOOP #########
+			if (size(sim.mutations) > 0) {
+				for (i in 0:(size(sim.mutations) - 1)) {
+					mut = sim.mutations[i];
+					id = mut.id;
+					
+					//chrom = mut.chromosome; if we need to keep track of individual autosomes, will need to use this
+					
+					position = mut.position;
+					origin_time = mut.originTick;
+					freq = sim.mutationFrequencies(p1, mut);
+					// NOTE: frequencies scaled to genomic region - e.g. max Y chrom frequency is 1, not 0.25
+					
+					female_effect = mut.getValue("e_f");
+					male_effect = mut.getValue("e_m");
+					
+					type = mut.mutationType; // use this to determine autosomal vs. not in R later 
+					if (type == sim.mutationTypes[0]){
+						info="m";
+						genic_var_mito_female = genic_var_mito_female + freq*(1-freq)*(female_effect^2);
+						genic_var_mito_male = genic_var_mito_male + freq*(1-freq)*(male_effect^2);
+						
+						genic_var_mito_scaled_female = genic_var_mito_scaled_female + (mito_scaling^2) * freq*(1-freq)*(female_effect^2);
+						genic_var_mito_scaled_male   = genic_var_mito_scaled_male   + (mito_scaling^2) * freq*(1-freq)*(male_effect^2);
+	
+					}
+					else {
+						info="a";
+						genic_var_auto_female = genic_var_auto_female + 2*freq*(1-freq)*(female_effect^2);
+						genic_var_auto_male = genic_var_auto_male + 2*freq*(1-freq)*(male_effect^2);
+					}
+					
+				if (match(sim.cycle, allele_recording_gen) >= 0) { // match returns -1 if there is no match
+					output_mut = id + "," + info + "," + position + "," + origin_time + "," + freq + "," + female_effect + "," + male_effect;
+					
+					writeFile(allele_file, output_mut, append=T);
+					output_mut = ""; // reset before next loop
+					
+					} // end of check on whether to record alleles
+				}
+			} // end of mutations loop
+		
+		
+		//######### PHENOTYPE AND CHROMOSOME LOOP #########
+		
+		// set up recording vectors
+		auto_vals_female = c();
+		auto_vals_male = c();
+		
+		mito_vals_female = c();
+		mito_vals_male = c();
+		
+		mito_scaled_vals_female = c();
+		mito_scaled_vals_male = c();
+		
+		phenotype_vals_female = c();
+		phenotype_vals_male = c();
+		
+		//loop through individuals
+		for (i in 0:(size(p1.individuals)-1)){
+			
+			individual = p1.individuals[i];
+			
+			auto_1_chroms = c(individual.haplosomesForChromosomes("A1"));
+			muts_auto_1 = auto_1_chroms.mutationsOfType(m2);
+			
+			auto_2_chroms = c(individual.haplosomesForChromosomes("A2"));
+			muts_auto_2 = auto_2_chroms.mutationsOfType(m2);
+			
+			auto_3_chroms = c(individual.haplosomesForChromosomes("A3"));
+			muts_auto_3 = auto_3_chroms.mutationsOfType(m2);
+			
+			auto_4_chroms = c(individual.haplosomesForChromosomes("A4"));
+			muts_auto_4 = auto_4_chroms.mutationsOfType(m2);
+			
+			auto_5_chroms = c(individual.haplosomesForChromosomes("A5"));
+			muts_auto_5 = auto_5_chroms.mutationsOfType(m2);
+			
+			auto_6_chroms = c(individual.haplosomesForChromosomes("A6"));
+			muts_auto_6 = auto_6_chroms.mutationsOfType(m2);
+			
+			auto_7_chroms = c(individual.haplosomesForChromosomes("A7"));
+			muts_auto_7 = auto_7_chroms.mutationsOfType(m2);
+			
+			auto_8_chroms = c(individual.haplosomesForChromosomes("A8"));
+			muts_auto_8 = auto_8_chroms.mutationsOfType(m2);
+			
+			auto_9_chroms = c(individual.haplosomesForChromosomes("A9"));
+			muts_auto_9 = auto_9_chroms.mutationsOfType(m2);
+			
+			auto_10_chroms = c(individual.haplosomesForChromosomes("A10"));
+			muts_auto_10 = auto_10_chroms.mutationsOfType(m2);
+			
+			muts_auto_all = c(
+				muts_auto_1,
+				muts_auto_2,
+				muts_auto_3,
+				muts_auto_4,
+				muts_auto_5,
+				muts_auto_6,
+				muts_auto_7,
+				muts_auto_8,
+				muts_auto_9,
+				muts_auto_10
+				);
+			
+			mito_chroms = individual.haplosomesForChromosomes("Mito");
+			muts_mito = c(mito_chroms.mutationsOfType(m1));
+			
+			
+			if (individual.sex == "F"){
+				
+				//female values of each region
+				mut_phenotype_auto_female = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_f")) else 0.0;
+				mut_phenotype_mito_female = size(muts_mito) ? sum(muts_mito.getValue("e_f")) else 0.0;
+				mut_phenotype_mito_scaled_female = mito_scaling * mut_phenotype_mito_female; //idk about scaling, keep for now
+				
+				//male values of each region
+				mut_phenotype_auto_male = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
+				mut_phenotype_mito_male = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
+				mut_phenotype_mito_scaled_male = mito_scaling * mut_phenotype_mito_male;
+				
+				//female summing values	
+				auto_vals_female = c(auto_vals_female, mut_phenotype_auto_female);
+				
+				mito_vals_female = c(mito_vals_female, mut_phenotype_mito_female);
+				mito_scaled_vals_female = c(mito_scaled_vals_female, mut_phenotype_mito_scaled_female);
+				
+				//male summing values
+				auto_vals_male = c(auto_vals_male, mut_phenotype_auto_male);
+				
+				mito_vals_male = c(mito_vals_male, mut_phenotype_mito_male);
+				mito_scaled_vals_male = c(mito_scaled_vals_male, mut_phenotype_mito_scaled_male);
+				
+				phenotype = mut_phenotype_auto_female + mut_phenotype_mito_scaled_female;
+				//question about whether we want the actual or the across sex male phenotype
+				//let's stick with actual for now
+				
+				phenotype_vals_female = c(phenotype_vals_female, phenotype);
+				
+				// #### PHENO RECORDING #####
+				if (match(sim.cycle, pheno_recording_gen) >= 0){
+					output_pheno = "F,";
+					output_pheno = output_pheno + mut_phenotype_auto_female +",";
+					output_pheno = output_pheno + mut_phenotype_mito_female +"," + mut_phenotype_mito_scaled_female + ",";
+					output_pheno = output_pheno + phenotype;
+					
+					writeFile(pheno_file, output_pheno, append=T);
+				}
+			
+			}
+			
+			else{//individual is male
+				
+				
+				//female values of each region
+				mut_phenotype_auto_female = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_f")) else 0.0;
+				
+				mut_phenotype_mito_female = size(muts_mito) ? sum(muts_mito.getValue("e_f")) else 0.0;
+				mut_phenotype_mito_scaled_female = mito_scaling * mut_phenotype_mito_female; //idk about scaling, keep for now
+				
+				//male values of each region
+				mut_phenotype_auto_male = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
+				
+				mut_phenotype_mito_male = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
+				mut_phenotype_mito_scaled_male = mito_scaling * mut_phenotype_mito_male;
+				
+				//female summing values	
+				auto_vals_female = c(auto_vals_female, mut_phenotype_auto_female);
+				
+				mito_vals_female = c(mito_vals_female, mut_phenotype_mito_female);
+				mito_scaled_vals_female = c(mito_scaled_vals_female, mut_phenotype_mito_scaled_female);
+				
+				//male summing values
+				auto_vals_male = c(auto_vals_male, mut_phenotype_auto_male);
+				
+				mito_vals_male = c(mito_vals_male, mut_phenotype_mito_male);
+				mito_scaled_vals_male = c(mito_scaled_vals_male, mut_phenotype_mito_scaled_male);
+				
+				phenotype = mut_phenotype_auto_male + mut_phenotype_mito_scaled_male;
+				phenotype_vals_male = c(phenotype_vals_male, phenotype);
+				
+				// #### PHENO RECORDING #####
+				if (match(sim.cycle, pheno_recording_gen) >= 0){
+					output_pheno = "M,";
+					output_pheno = output_pheno + mut_phenotype_auto_male +",";
+					output_pheno = output_pheno + mut_phenotype_mito_male +"," + mut_phenotype_mito_scaled_male + ",";
+					output_pheno = output_pheno + phenotype;
+					
+					writeFile(pheno_file, output_pheno, append=T);
+				}
+			
+			}
+			
+			output_pheno = ""; //clears pheno output between individuals, just in case
+		
+		} // end of loop through individuals
+		
+		// #### CHROM RECORDING #####
+		
+		avg_auto_female = mean(auto_vals_female);
+		avg_mito_female = mean(mito_vals_female);
+		avg_mito_scaled_female = mean(mito_scaled_vals_female);
+		
+		avg_auto_male = mean(auto_vals_male);
+		avg_mito_male = mean(mito_vals_male);
+		avg_mito_scaled_male = mean(mito_scaled_vals_male);
+		
+		var_auto_female = var(auto_vals_female);
+		var_mito_female = var(mito_vals_female);
+		var_mito_scaled_female = var(mito_scaled_vals_female);
+		
+		var_auto_male = var(auto_vals_male);
+		var_mito_male = var(mito_vals_male);
+		var_mito_scaled_male = var(mito_scaled_vals_male);
+		
+		avg_phenotype_female = mean(phenotype_vals_female);
+		avg_phenotype_male = mean(phenotype_vals_male);
+		
+		var_phenotype_female = var(phenotype_vals_female);
+		var_phenotype_male = var(phenotype_vals_male);
+		
+		//within mito covariance
+		cov_mito_female = (var_mito_female - genic_var_mito_female)/2;
+		cov_mito_male = (var_mito_male - genic_var_mito_male)/2;
+		
+		//within mito scaled covariance
+		cov_mito_scaled_female = (var_mito_scaled_female - genic_var_mito_scaled_female)/2;
+		cov_mito_scaled_male = (var_mito_scaled_male - genic_var_mito_scaled_male)/2;
+		
+		//within auto covariance
+		cov_auto_female = (var_auto_female - genic_var_auto_female)/2;
+		cov_auto_male = (var_auto_male - genic_var_auto_male)/2;
+		
+		//covariance of mito and auto contributions, using scaled mito in case we change scaling factor
+		cov_mito_auto_female = (var_phenotype_female - var_auto_female - var_mito_scaled_female)/2;
+		cov_mito_auto_male = (var_phenotype_male - var_auto_male - var_mito_scaled_male)/2;
+		
+		output_chrom = "" + sim.cycle + "," +
+			avg_auto_female + "," + avg_mito_female + "," + avg_mito_scaled_female + "," +
+			avg_auto_male + "," + avg_mito_male + "," + avg_mito_scaled_male + "," +
+			var_auto_female + "," + var_mito_female + "," + var_mito_scaled_female + "," +
+			var_auto_male + "," + var_mito_male + "," + var_mito_scaled_male + "," +
+			avg_phenotype_female + "," + avg_phenotype_male + "," +
+			var_phenotype_female + "," + var_phenotype_male + "," +
+			genic_var_auto_female + "," + genic_var_mito_female + "," + genic_var_mito_scaled_female + "," +
+			genic_var_auto_male + "," + genic_var_mito_male + "," + genic_var_mito_scaled_male + "," + 
+			cov_mito_female + "," + cov_mito_scaled_female + "," + cov_auto_female + "," +
+			cov_mito_male + "," + cov_mito_scaled_male + "," + cov_auto_male + "," +
+			cov_mito_auto_female + "," + cov_mito_auto_male;
+		
+		writeFile(chrom_file, output_chrom, append=T);
+	
+	}// end of if statements about whether this is a recording generation
+
+} 
+burn_in late() {
+
+	sim.outputFull(sim_file); // record full simulation
+	
+	//record mutation effects to read back in
+	if (length(sim.mutationsOfType(m1))>0){
+		for (i in 0:(length(sim.mutationsOfType(m1)) - 1)){
+			mut = sim.mutationsOfType(m1)[i];
+			freq = sim.mutationFrequencies(p1, mut);
+			if (freq > 0.0){
+				output = mut.id + ","+freq+","+ mut.getValue("e_f")+","+mut.getValue("e_m")+ "," + "m1";
+				writeFile(mut_file, output, append=T);
+
+			}
+		}
+		}
+	if (length(sim.mutationsOfType(m2))>0){
+		for (i in 0:(length(sim.mutationsOfType(m2)) - 1)){
+			mut = sim.mutationsOfType(m2)[i];
+			freq = sim.mutationFrequencies(p1, mut);
+			if (freq > 0.0){
+				output = mut.id + ","+freq+","+ mut.getValue("e_f")+","+mut.getValue("e_m")+ "," + "m2";
+				writeFile(mut_file, output, append=T);
+
+			}
+		}
+	}
+	
+	sim.simulationFinished();
+	}
