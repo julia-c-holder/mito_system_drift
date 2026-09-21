@@ -441,14 +441,14 @@ fitnessEffect() {
 				
 				//female values of each region
 				mut_phenotype_auto_female = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_f")) else 0.0;
-				mut_phenotype_x_female = size(muts_x) ? sum(muts_x.getValue("e_f")) else 0.0;
+				mut_phenotype_x_female = size(muts_x) ? sum(muts_x.getValue("e_f"))/2 else 0.0;
 				mut_phenotype_mito_female = size(muts_mito) ? sum(muts_mito.getValue("e_f")) else 0.0;
 			
 				mut_phenotype_mito_scaled_female = mito_scaling * mut_phenotype_mito_female; //idk about scaling, keep for now
 				
 				//male values of each region
 				mut_phenotype_auto_male = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
-				mut_phenotype_x_male = size(muts_x) ? sum(muts_x.getValue("e_m")) else 0.0;
+				mut_phenotype_x_male = size(muts_x) ? sum(muts_x.getValue("e_m"))/2 else 0.0;
 				mut_phenotype_mito_male = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
 				mut_phenotype_mito_scaled_male = mito_scaling * mut_phenotype_mito_male;
 				
@@ -466,7 +466,7 @@ fitnessEffect() {
 				mito_vals_male = c(mito_vals_male, mut_phenotype_mito_male);
 				mito_scaled_vals_male = c(mito_scaled_vals_male, mut_phenotype_mito_scaled_male);
 				
-				phenotype = mut_phenotype_auto_female + mut_phenotype_x_female +  mut_phenotype_mito_scaled_female;
+				phenotype = mut_phenotype_auto_female + 2*mut_phenotype_x_female +  mut_phenotype_mito_scaled_female;
 				//question about whether we want the actual or the across sex male phenotype
 				//let's stick with actual for now
 				
@@ -584,7 +584,7 @@ fitnessEffect() {
 		cov_auto_male = (var_auto_male - genic_var_auto_male)/2;
 		
 		//within z covariance
-		cov_x_female = (var_x_female - genic_var_x_female)/2;
+		cov_x_female = (2*var_x_female - genic_var_x_female)/2;
 		cov_x_male = (var_x_male - genic_var_x_male)/2;
 		
 		//within w covariance
@@ -592,7 +592,7 @@ fitnessEffect() {
 		
 		//covariance of mito and auto contributions, using scaled mito in case we change scaling factor
 		cov_mito_auto_female = (var_phenotype_female - var_auto_female - 
-var_x_female - var_mito_scaled_female)/2;
+2*var_x_female - var_mito_scaled_female)/2;
 		cov_mito_auto_male = (var_phenotype_male - var_auto_male - var_x_male - 
 var_y_male - var_mito_scaled_male)/2;
 		

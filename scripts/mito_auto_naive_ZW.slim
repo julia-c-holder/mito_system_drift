@@ -14,7 +14,7 @@ initialize() {
 	defineConstant("pop_size", 10000);
 	defineConstant("mut_rate", 10^-5);
 	
-	defineConstant("length_chrom", 99);
+	defineConstant("length_chrom", 100);
 	
 	defineConstant("auto_recomb_rate", 0.01); // approx one crossover per chromosome per meiosis 
 	
@@ -468,14 +468,14 @@ fitnessEffect() {
 				//female values of each region
 				mut_phenotype_auto_female = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_f")) else 0.0;
 				
-				mut_phenotype_z_female = size(muts_z) ? sum(muts_z.getValue("e_f")) else 0.0;
+				mut_phenotype_z_female = size(muts_z) ? sum(muts_z.getValue("e_f"))/2 else 0.0;
 				
 				mut_phenotype_mito_female = size(muts_mito) ? sum(muts_mito.getValue("e_f")) else 0.0;
 				mut_phenotype_mito_scaled_female = mito_scaling * mut_phenotype_mito_female; //idk about scaling, keep for now
 				
 				//male values of each region
 				mut_phenotype_auto_male = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
-				mut_phenotype_z_male = size(muts_z) ? sum(muts_z.getValue("e_m")) else 0.0;
+				mut_phenotype_z_male = size(muts_z) ? sum(muts_z.getValue("e_m"))/2 else 0.0;
 				
 				mut_phenotype_mito_male = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
 				mut_phenotype_mito_scaled_male = mito_scaling * mut_phenotype_mito_male;
@@ -493,7 +493,7 @@ fitnessEffect() {
 				mito_vals_male = c(mito_vals_male, mut_phenotype_mito_male);
 				mito_scaled_vals_male = c(mito_scaled_vals_male, mut_phenotype_mito_scaled_male);
 				
-				phenotype = mut_phenotype_auto_male + mut_phenotype_z_male + mut_phenotype_mito_scaled_male;
+				phenotype = mut_phenotype_auto_male + 2*mut_phenotype_z_male + mut_phenotype_mito_scaled_male;
 				phenotype_vals_male = c(phenotype_vals_male, phenotype);
 				
 				// #### PHENO RECORDING #####
@@ -558,7 +558,7 @@ fitnessEffect() {
 		
 		//within z covariance
 		cov_z_female = (var_z_female - genic_var_z_female)/2;
-		cov_z_male = (var_z_male - genic_var_z_male)/2;
+		cov_z_male = (2*var_z_male - genic_var_z_male)/2;
 		
 		//within w covariance
 		cov_w_female = (var_w_female - genic_var_w_female)/2; 
@@ -567,7 +567,7 @@ fitnessEffect() {
 		cov_mito_auto_female = (var_phenotype_female - var_auto_female - 
 var_z_female - var_w_female - var_mito_scaled_female)/2;
 		cov_mito_auto_male = (var_phenotype_male - var_auto_male - 
-var_z_male - var_mito_scaled_male)/2;
+2*var_z_male - var_mito_scaled_male)/2;
 		
 		output_chrom = "" + sim.cycle + "," +
 			avg_auto_female + "," + avg_mito_female + "," + avg_mito_scaled_female + "," +
