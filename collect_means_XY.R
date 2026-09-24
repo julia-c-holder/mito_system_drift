@@ -105,7 +105,7 @@ csv_collector <- function(files){
 chrom_file_names <- c()
 
 for(i in 2:nreps){
-  chrom_file_names[i] <- paste("results/", repnum,"/mito_auto_", repnum, "_", i, "_chrom.csv", sep="")
+  chrom_file_names[i-1] <- paste("results/", repnum,"/mito_auto_", repnum, "_", i, "_chrom.csv", sep="")
 }
 print(chrom_file_names[1:5])
 cov_var_collected <- csv_collector(chrom_file_names)
