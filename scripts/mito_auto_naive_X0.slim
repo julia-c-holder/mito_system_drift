@@ -252,7 +252,7 @@ fitnessEffect() {
 	else{//individual is male
 		
 		mut_phenotype_auto = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
-		mut_phenotype_x = size(muts_x) ? sum(muts_x.getValue("e_m")) else 0.0;
+		mut_phenotype_x = size(muts_x) ? 2*sum(muts_x.getValue("e_m")) else 0.0;
 		
 		
 		mut_phenotype_mito = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
