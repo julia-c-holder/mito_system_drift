@@ -4,6 +4,7 @@ library(readr)
 #command line arguments
 args <- commandArgs(trailingOnly = TRUE)
 repnum <- args[1]
+nreps <- args[2]
 
 csv_collector <- function(files){
   #initializing with first file
@@ -100,13 +101,11 @@ csv_collector <- function(files){
   return(all_df)
 }
 
-nreps <- 250
-
 ### Results are in folder 5
 chrom_file_names <- c()
 
-for(i in 1:nreps){
-  chrom_file_names[i] <- paste("results/", repnum, "/mito_auto_", repnum, "_", i, "_chrom.csv", sep="")
+for(i in 2:nreps){
+  chrom_file_names[i] <- paste("results/", repnum,"/mito_auto_", repnum, "_", i, "_chrom.csv", sep="")
 }
 
 cov_var_collected <- csv_collector(chrom_file_names)
