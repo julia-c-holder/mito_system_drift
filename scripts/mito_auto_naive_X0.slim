@@ -8,14 +8,14 @@ initialize() {
 		defineConstant("extra", 2);
 	}
 	
-	defineConstant("length_mito", 10); //should I vary?
+	//defineConstant("length_mito", 10); //should I vary?
 	
 	defineConstant("fit_sd", 1); // sd of fitness function
 
 	defineConstant("pop_size", 10000);
 	defineConstant("mut_rate", 10^-5);
 	
-	defineConstant("length_chrom", 99);
+	defineConstant("length_chrom", 100);
 	
 	defineConstant("auto_recomb_rate", 0.01); // approx one crossover per chromosome per meiosis 
 	
@@ -467,14 +467,14 @@ fitnessEffect() {
 				//female values of each region
 				mut_phenotype_auto_female = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_f")) else 0.0;
 				
-				mut_phenotype_x_female = size(muts_x) ? sum(muts_x.getValue("e_f")) else 0.0;
+				mut_phenotype_x_female = size(muts_x) ? 2*sum(muts_x.getValue("e_f")) else 0.0;
 				
 				mut_phenotype_mito_female = size(muts_mito) ? sum(muts_mito.getValue("e_f")) else 0.0;
 				mut_phenotype_mito_scaled_female = mito_scaling * mut_phenotype_mito_female; //idk about scaling, keep for now
 				
 				//male values of each region
 				mut_phenotype_auto_male = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
-				mut_phenotype_x_male = size(muts_x) ? sum(muts_x.getValue("e_m")) else 0.0;
+				mut_phenotype_x_male = size(muts_x) ? 2*sum(muts_x.getValue("e_m")) else 0.0;
 				mut_phenotype_mito_male = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
 				mut_phenotype_mito_scaled_male = mito_scaling * mut_phenotype_mito_male;
 				
