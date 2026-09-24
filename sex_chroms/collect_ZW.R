@@ -102,7 +102,7 @@ csv_collector <- function(files){
 ### Results are in folder 5
 chrom_file_names <- c()
 
-for(i in 2:nreps){
+for(i in 1:nreps){
   chrom_file_names[i-1] <- paste("results/", repnum,"/mito_auto_", repnum, "_", i, "_chrom.csv", sep="")
 }
 print(chrom_file_names[1:5])
