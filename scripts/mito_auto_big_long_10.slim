@@ -142,7 +142,8 @@ initialize() {
 	
 	defineConstant("chrom_recording_interval", 100); //CHANGE
 	//below must be multiples of above
-	recording_gens = c(10, burn_in, burn_in+10000, burn_in+20000, burn_in+30000, burn_in+40000, burn_in+50000);
+	//recording_gens = c(10, burn_in, burn_in+10000, burn_in+20000, burn_in+30000, burn_in+40000, burn_in+50000);
+	recording_gens = c(10, seq(100000, 200000, 10000));
 	defineConstant("pheno_recording_gen", recording_gens);
 	defineConstant("allele_recording_gen", recording_gens);
 
