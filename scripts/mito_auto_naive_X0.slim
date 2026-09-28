@@ -3,11 +3,12 @@
 initialize() {
 	if (exists("slimgui")) {
 		defineConstant("results_path_base", "~/Desktop/");
-		defineConstant("replicate_id", 5);
+		defineConstant("replicate_id", 400);
 		defineConstant("length_mito", 10);
+		defineConstant("extra", 2);
 	}
 	
-	defineConstant("length_mito", 10); //should I vary?
+	//defineConstant("length_mito", 10); //should I vary?
 	
 	defineConstant("fit_sd", 1); // sd of fitness function
 
@@ -42,7 +43,6 @@ initialize() {
 	m1.convertToSubstitution = F;
 	m2.convertToSubstitution = F;
 	m3.convertToSubstitution = F;
-	m4.convertToSubstitution = F;
 	
 	
 	// all autosomes use the same mutations here; 
@@ -252,7 +252,7 @@ fitnessEffect() {
 	else{//individual is male
 		
 		mut_phenotype_auto = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
-		mut_phenotype_x = size(muts_x) ? sum(muts_x.getValue("e_m")) else 0.0;
+		mut_phenotype_x = size(muts_x) ? 2*sum(muts_x.getValue("e_m")) else 0.0;
 		
 		
 		mut_phenotype_mito = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
@@ -467,14 +467,14 @@ fitnessEffect() {
 				//female values of each region
 				mut_phenotype_auto_female = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_f")) else 0.0;
 				
-				mut_phenotype_x_female = size(muts_x) ? sum(muts_x.getValue("e_f")) else 0.0;
+				mut_phenotype_x_female = size(muts_x) ? 2*sum(muts_x.getValue("e_f")) else 0.0;
 				
 				mut_phenotype_mito_female = size(muts_mito) ? sum(muts_mito.getValue("e_f")) else 0.0;
 				mut_phenotype_mito_scaled_female = mito_scaling * mut_phenotype_mito_female; //idk about scaling, keep for now
 				
 				//male values of each region
 				mut_phenotype_auto_male = size(muts_auto_all) ? sum(muts_auto_all.getValue("e_m")) else 0.0;
-				mut_phenotype_x_male = size(muts_x) ? sum(muts_x.getValue("e_m")) else 0.0;
+				mut_phenotype_x_male = size(muts_x) ? 2*sum(muts_x.getValue("e_m")) else 0.0;
 				mut_phenotype_mito_male = size(muts_mito) ? sum(muts_mito.getValue("e_m")) else 0.0;
 				mut_phenotype_mito_scaled_male = mito_scaling * mut_phenotype_mito_male;
 				
