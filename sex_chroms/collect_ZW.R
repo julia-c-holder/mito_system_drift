@@ -13,22 +13,22 @@ csv_collector <- function(files){
   cycles = index$V1
   avg_auto_f = index$V2
   avg_mito_f = index$V3
-  avg_x_f = index$V5
+  avg_z_f = index$V5
+  avg_w_f = index$V6
 
-  avg_auto_m = index$V6
-  avg_mito_m = index$V7
-  avg_x_m = index$V9
-  avg_y_m = index$V10
+  avg_auto_m = index$V7
+  avg_mito_m = index$V8
+  avg_z_m = index$V10
 
   var_auto_female = index$V11
   var_mito_female = index$V12
   #var_mito_scaled_female = index$V13
-  var_x_female = index$V14
-  var_auto_male = index$V15
-  var_mito_male  = index$V16
+  var_z_female = index$V14
+  var_w_female = index$V15
+  var_auto_male = index$V16
+  var_mito_male  = index$V17
   #var_mito_scaled_male  = index$V17
-  var_x_male   = index$V18
-  var_y_male = index$V19
+  var_z_male   = index$V19
   ###avg_phenotype_female = index$V20
   ###avg_phenotype_male  = index$V21
   var_phenotype_female = index$V22
@@ -57,46 +57,44 @@ csv_collector <- function(files){
   
   reps = rep(1, length(cycles))
   all_df <- data.frame(cycles = cycles, avg_auto_f=avg_auto_f, avg_mito_f=avg_mito_f,
-                       avg_x_f=avg_x_f, avg_auto_m=avg_auto_m, avg_mito_m=avg_mito_m, avg_x_m=avg_x_m,
-                       avg_y_m=avg_y_m, reps=reps, var_pheno_f = var_phenotype_female,
+                       avg_z_f=avg_z_f, avg_w_f = avg_w_f, avg_auto_m=avg_auto_m, avg_mito_m=avg_mito_m, avg_z_m=avg_z_m,
+                       reps=reps, var_pheno_f = var_phenotype_female,
                        var_pheno_m=var_phenotype_male, var_mito_f = var_mito_female, var_mito_m=var_mito_male,
-  var_auto_f = var_auto_female, var_auto_m = var_auto_male, var_x_f=var_x_female, var_x_m=var_x_male,
-                       var_y_m=var_y_male)
+  var_auto_f = var_auto_female, var_auto_m = var_auto_male, var_z_f=var_z_female, var_w_f = var_w_female, var_z_m=var_z_male)
   for(i in 2:length(files)){
     index = read.csv(files[i], header=F, sep=",")
     #columns I will record
     cycles = index$V1
     avg_auto_f = index$V2
     avg_mito_f = index$V3
-    avg_x_f = index$V5
+    avg_z_f = index$V5
+    avg_w_f = index$V6
 
-    avg_auto_m = index$V6
-    avg_mito_m = index$V7
-    avg_x_m = index$V9
-    avg_y_m = index$V10
-
+    avg_auto_m = index$V7
+    avg_mito_m = index$V8
+    avg_z_m = index$V10
 
   var_auto_female = index$V11
   var_mito_female = index$V12
   #var_mito_scaled_female = index$V13
-  var_x_female = index$V14
-  var_auto_male = index$V15
-  var_mito_male  = index$V16
+  var_z_female = index$V14
+  var_w_female = index$V15
+
+  var_auto_male = index$V16
+  var_mito_male  = index$V17
   #var_mito_scaled_male  = index$V17
-  var_x_male   = index$V18
-  var_y_male = index$V19
+  var_z_male   = index$V19
   ###avg_phenotype_female = index$V20
   ###avg_phenotype_male  = index$V21
   var_phenotype_female = index$V22
   var_phenotype_male  = index$V23
 
     reps = rep(i, length(cycles))
-    all_df <- rbind(all_df, data.frame(cycles = cycles, avg_auto_f=avg_auto_f, avg_mito_f=avg_mito_f, 
-                       avg_x_f=avg_x_f, avg_auto_m=avg_auto_m, avg_mito_m=avg_mito_m, avg_x_m=avg_x_m,
-                       avg_y_m=avg_y_m, reps=reps, var_pheno_f = var_phenotype_female,
+    all_df <- rbind(all_df, data.frame(cycles = cycles, avg_auto_f=avg_auto_f, avg_mito_f=avg_mito_f,
+                       avg_z_f=avg_z_f, avg_w_f = avg_w_f, avg_auto_m=avg_auto_m, avg_mito_m=avg_mito_m, avg_z_m=avg_z_m,
+                       reps=reps, var_pheno_f = var_phenotype_female,
                        var_pheno_m=var_phenotype_male, var_mito_f = var_mito_female, var_mito_m=var_mito_male,
-  var_auto_f = var_auto_female, var_auto_m = var_auto_male, var_x_f=var_x_female, var_x_m=var_x_male,
-                       var_y_m=var_y_male))
+  var_auto_f = var_auto_female, var_auto_m = var_auto_male, var_z_f=var_z_female, var_w_f = var_w_female, var_z_m=var_z_male))
   }
   return(all_df)
 }
@@ -104,7 +102,7 @@ csv_collector <- function(files){
 ### Results are in folder 5
 chrom_file_names <- c()
 
-for(i in 2:nreps){
+for(i in 1:nreps){
   chrom_file_names[i-1] <- paste("results/", repnum,"/mito_auto_", repnum, "_", i, "_chrom.csv", sep="")
 }
 print(chrom_file_names[1:5])
