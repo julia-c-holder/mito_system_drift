@@ -15,7 +15,7 @@ module load SLiM/5.1
 cd /project/pmuralidhar/jcholder/mito_nuclear/scripts
 
 label=$(($(($(($SLURM_ARRAY_TASK_ID - 1)) / 100)) + 1))
-which_pop=$(($(($SLURM_ARRAY_TASK_ID % 10))+1))
+which_pop=$(($(($SLURM_ARRAY_TASK_ID % 100))+1))
 dirPath="/project/pmuralidhar/jcholder/mito_nuclear/results/"
 
 slim -d "results_path_base='$dirPath'" -d "extra='$label'" -d 'replicate_id=14' -d "which_pop='$which_pop'" mito_auto_basic_between.slim
