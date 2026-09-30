@@ -3,8 +3,8 @@
 #So the normalization constants should be drawn from the no_dups burn ins
 library(readr)
 
-install.packages("DescTools")
-library(DescTools)
+#install.packages("DescTools")
+#library(DescTools)
 library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
