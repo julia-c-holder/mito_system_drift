@@ -2,8 +2,14 @@
 ## records avg and var phenotype for males and females, cov within mito
 ## and mito auto covariance in males and females #
 # This script is adjusted for the run of mito_auto_w_cov.slim with mito length=100
+
+library(readr)
+library(DescTools)
+library(dplyr)
+
 args <- commandArgs(trailingOnly = TRUE)
 repnum <- args[1] #simulation replicate number, which is the folder the results are in 
+nreps <- args[2]
 
 csv_collector <- function(files){
   #initializing with first file
@@ -89,8 +95,6 @@ csv_collector <- function(files){
   }
   return(all_df)
 }
-
-nreps <- 250
 
 ### Results are in folder 5
 chrom_file_names <- c()
