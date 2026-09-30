@@ -3,8 +3,8 @@
 ## and mito auto covariance in males and females #
 # This script is adjusted for the run of mito_auto_w_cov.slim with mito length=100
 
+library(stringr)
 library(readr)
-library(DescTools)
 library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
