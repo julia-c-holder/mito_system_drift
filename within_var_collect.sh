@@ -15,7 +15,10 @@
 #SBATCH --mail-type=FAIL  # Email notification options: ALL, BEGIN, END, FAIL, ALL, NONE
 #SBATCH --mail-user=jcholder@rcc.uchicago.edu
 rep=12
+nreps=1000
+suffix="within_pheno_150000.csv"
+
 module load R
 cd /project/pmuralidhar/jcholder/mito_nuclear
 
-Rscript within_var_collect.R $rep
+Rscript within_var_collect.R $rep $nreps $suffix
