@@ -21,7 +21,7 @@ for(i in 1:nreps){
 
 var_collector <- function(files){
   #initializing with first file
-  data_mat <- matrix(nrow=nreps, ncol=6)
+  data_mat <- matrix(nrow=as.integer(nreps), ncol=6)
   #subsetting to the time period where recording is every 100 gens
   index = read.csv(files[1], header=F, sep=",")
   
