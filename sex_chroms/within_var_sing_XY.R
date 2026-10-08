@@ -31,6 +31,8 @@ normalizing_fun <- function(num, data, norm){
   y_norm_m <- norm$X7[num]
 
   #SLiM puts all females first then all males in the population
+  print(m_norm_f)
+  print(data$auto_p[1] + data$auto_p[2])
   auto_p <- data$auto_p - c(rep(a_norm_f, N/2), rep(a_norm_m, N/2))
   mito_p <- data$mito_p - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
   mito_scaled_p <- data$mito_scaled_p - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
