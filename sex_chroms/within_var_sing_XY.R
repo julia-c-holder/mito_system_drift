@@ -31,13 +31,12 @@ normalizing_fun <- function(num, data, norm){
   y_norm_m <- norm$X7[num]
 
   #SLiM puts all females first then all males in the population
-  print(m_norm_f)
-  print(data$auto_p[1] + data$auto_p[2])
-  auto_p <- data$auto_p - c(rep(a_norm_f, N/2), rep(a_norm_m, N/2))
-  mito_p <- data$mito_p - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
-  mito_scaled_p <- data$mito_scaled_p - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
-  x_norm <- data$x_p - c(rep(x_norm_f, N/2), rep(x_norm_m, N/2))
-  y_norm <- c(rep(0, N/2), data$y_p[5001:10000] - rep(y_norm_m, N/2))
+
+  auto_p <- as.numeric(data$auto_p) - c(rep(a_norm_f, N/2), rep(a_norm_m, N/2))
+  mito_p <- as.numeric(data$mito_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
+  mito_scaled_p <- as.numeric(data$mito_scaled_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
+  x_norm <- as.numeric(data$x_p) - c(rep(x_norm_f, N/2), rep(x_norm_m, N/2))
+  y_norm <- c(rep(0, N/2), as.numeric(data$y_p[5001:10000]) - rep(y_norm_m, N/2))
   pheno <- auto_p + mito_scaled_p + x_norm + y_norm
 
   normalized <- data.frame("sex" = data$sex, "auto_p" = auto_p, "mito_p" = mito_p, "mito_scaled_p" = mito_scaled_p,
