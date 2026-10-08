@@ -16,9 +16,9 @@ if(n == m){
   no_dups <- file_collected
 }
 
-burn_in <- filter(no_dups, cycles==100000)
+burn_in <- filter(no_dups, cycles=="100000")
 
-normal_df <- data.frame(burn_in$avg_mito_f, burn_in$avg_mito_m, 
+normal_df <- data.frame(burn_in$avg_mito_f, burn_in$avg_mito_m,
                         burn_in$avg_auto_f, burn_in$avg_auto_m, burn_in$avg_x_f, burn_in$avg_x_m, burn_in$avg_y_m)
 
 write_csv(normal_df, file_out, col_names = F)
