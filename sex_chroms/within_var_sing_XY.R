@@ -33,6 +33,7 @@ normalizing_fun <- function(num, data, norm){
 
   #SLiM puts all females first then all males in the population
   print(length(data$auto_p))
+  print(sum(as.numeric(data$auto_p[1], data$pheno[1])))
   auto_p <- as.numeric(data$auto_p) - c(rep(a_norm_f, N/2), rep(a_norm_m, N/2))
   mito_p <- as.numeric(data$mito_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
   mito_scaled_p <- as.numeric(data$mito_scaled_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
@@ -78,7 +79,8 @@ print(id)
 num1 <- as.integer(id)
 file_name <- paste(prefix, id,"_pheno_", suffix, sep="")
 
-raw_file <- read_csv(file_name, col_names = rep_heads)[2:10001,]
+first_read <- read_csv(file_name, header=F)
+raw_file <- first_read[2:10001,]
 norm_file <- read_csv(norm_name, col_names = FALSE)
 
 normed <- normalizing_fun(num1, raw_file, norm_file)
