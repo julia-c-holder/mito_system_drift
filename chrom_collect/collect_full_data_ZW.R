@@ -28,7 +28,7 @@ csv_collector <- function(files, head_names){
     files_collected <- rbind(files_collected, new_file)
   }
 
-  return(file_collected)
+  return(files_collected)
 }
 
 file_log <- c()
