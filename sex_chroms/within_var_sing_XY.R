@@ -20,6 +20,7 @@ rep_heads <- c("sex", "auto_p", "mito_p", "mito_scaled_p","x_p", "y_p", "pheno")
 normalizing_fun <- function(num, data, norm){
   ##THIS FUNCTION ASSUMES SCALING FACTOR IS 1 FOR MITOCHONDRIA --- EDIT IF CHANGING SCALING!!!
   N <- length(data$sex)
+  print(N)
   m_norm_f <- norm$X1[num] #mean female mitochondrial value at end of burn-in
   m_norm_m <- norm$X2[num]
 
@@ -31,7 +32,7 @@ normalizing_fun <- function(num, data, norm){
   y_norm_m <- norm$X7[num]
 
   #SLiM puts all females first then all males in the population
-
+  print(length(data$auto_p))
   auto_p <- as.numeric(data$auto_p) - c(rep(a_norm_f, N/2), rep(a_norm_m, N/2))
   mito_p <- as.numeric(data$mito_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
   mito_scaled_p <- as.numeric(data$mito_scaled_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
