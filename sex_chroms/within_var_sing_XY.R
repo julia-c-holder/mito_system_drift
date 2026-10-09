@@ -79,7 +79,7 @@ print(id)
 num1 <- as.integer(id)
 file_name <- paste(prefix, id,"_pheno_", suffix, sep="")
 
-first_read <- read_csv(file_name, header=F)
+first_read <- read_csv(file_name, col_names=F)
 raw_file <- first_read[2:10001,]
 norm_file <- read_csv(norm_name, col_names = FALSE)
 
