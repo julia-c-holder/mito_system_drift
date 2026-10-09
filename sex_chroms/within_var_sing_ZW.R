@@ -15,7 +15,7 @@ fitness_fun <- function(pheno){
 	fitness <- dnorm(pheno, 0, 1)*sqrt(2*pi)
 	return(fitness)
 }
-rep_heads <- c("sex", "auto_p", "mito_p", "mito_scaled_p","x_p", "y_p", "pheno")
+rep_heads <- c("sex", "auto_p", "mito_p", "mito_scaled_p","z_p", "w_p", "pheno")
 
 normalizing_fun <- function(num, data, norm){
   ##THIS FUNCTION ASSUMES SCALING FACTOR IS 1 FOR MITOCHONDRIA --- EDIT IF CHANGING SCALING!!!
@@ -27,9 +27,9 @@ normalizing_fun <- function(num, data, norm){
   a_norm_f <- norm$X3[num] #mean female autosomal value at end of burn-in
   a_norm_m <- norm$X4[num]
 
-  x_norm_f <- norm$X5[num] 
-  x_norm_m <- norm$X6[num]
-  y_norm_m <- norm$X7[num]
+  z_norm_f <- norm$X5[num]
+  z_norm_m <- norm$X6[num]
+  w_norm_f <- norm$X7[num]
 
   #SLiM puts all females first then all males in the population
   print(length(data$auto_p))
@@ -37,12 +37,12 @@ normalizing_fun <- function(num, data, norm){
   auto_p <- as.numeric(data$auto_p) - c(rep(a_norm_f, N/2), rep(a_norm_m, N/2))
   mito_p <- as.numeric(data$mito_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
   mito_scaled_p <- as.numeric(data$mito_scaled_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
-  x_norm <- c(2*(as.numeric(data$x_p[1:5000]) - c(rep(x_norm_f, N/2))), as.numeric(data$x_p[1:5000])- c(rep(x_norm_m, N/2)))
-  y_norm <- c(rep(0, N/2), as.numeric(data$y_p[5001:10000]) - rep(y_norm_m, N/2))
-  pheno <- auto_p + mito_scaled_p + x_norm + y_norm
+  z_norm <- c(as.numeric(data$z_p[1:5000])- c(rep(z_norm_f), N/2), 2*as.numeric(data$z_p[5001:10000] - c(rep(z_norm_m), N/2)))
+  w_norm <- c((as.numeric(data$z_p[1:5000] - rep(w_norm_f, N/2)), rep(0, N/2)))
+  pheno <- auto_p + mito_scaled_p + z_norm + w_norm
 
   normalized <- data.frame("sex" = data$sex, "auto_p" = auto_p, "mito_p" = mito_p, "mito_scaled_p" = mito_scaled_p,
-                           "x_p" = x_norm, "y_p" = y_norm, "pheno" = pheno)
+                           "z_p" = z_norm, "w_p" = w_norm, "pheno" = pheno)
   return(normalized)
 }
 
