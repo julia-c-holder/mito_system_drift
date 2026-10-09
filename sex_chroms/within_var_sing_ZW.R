@@ -37,9 +37,10 @@ normalizing_fun <- function(num, data, norm){
   auto_p <- as.numeric(data$auto_p) - c(rep(a_norm_f, N/2), rep(a_norm_m, N/2))
   mito_p <- as.numeric(data$mito_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
   mito_scaled_p <- as.numeric(data$mito_scaled_p) - c(rep(m_norm_f, N/2), rep(m_norm_m, N/2))
-  z_norm <- c(as.numeric(data$z_p[1:5000])- c(rep(z_norm_f), N/2), 2*(as.numeric(data$z_p[5001:10000]) - c(rep(z_norm_m), N/2)))
+  z_norm <- c(as.numeric(data$z_p[1:5000])- c(rep(z_norm_f, N/2)), 2*(as.numeric(data$z_p[5001:10000]) - c(rep(z_norm_m, N/2)))
   w_norm <- c(as.numeric(data$z_p[1:5000]) - rep(w_norm_f, N/2), rep(0, N/2))
   pheno <- auto_p + mito_scaled_p + z_norm + w_norm
+  print(pheno[1:5])
 
   normalized <- data.frame("sex" = data$sex, "auto_p" = auto_p, "mito_p" = mito_p, "mito_scaled_p" = mito_scaled_p,
                            "z_p" = z_norm, "w_p" = w_norm, "pheno" = pheno)
