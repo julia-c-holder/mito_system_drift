@@ -9,9 +9,9 @@ library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
 rep <- args[1]
-nreps <- 250
+nreps <- args[2]
 prefix <- paste("results/within/variances/rep", rep, "_", sep="")
-suffix <- "within_pheno_150000.csv"
+suffix <- args[3]
 var_file_names <- c()
 
 for(i in 1:nreps){
@@ -21,7 +21,7 @@ for(i in 1:nreps){
 
 var_collector <- function(files){
   #initializing with first file
-  data_mat <- matrix(nrow=nreps, ncol=6)
+  data_mat <- matrix(nrow=as.integer(nreps), ncol=6)
   #subsetting to the time period where recording is every 100 gens
   index = read.csv(files[1], header=F, sep=",")
   

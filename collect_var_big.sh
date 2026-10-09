@@ -17,5 +17,6 @@
 
 module load R
 cd /project/pmuralidhar/jcholder/mito_nuclear
-#repnum="8"
-R --no-save CMD BATCH collect_var_big.R #$repnum
+repnum="24"
+nreps="1000"
+Rscript collect_var_big.R $repnum $nreps

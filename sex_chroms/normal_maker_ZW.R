@@ -19,6 +19,6 @@ if(n == m){
 burn_in <- filter(no_dups, cycles=="100000")
 
 normal_df <- data.frame(burn_in$avg_mito_f, burn_in$avg_mito_m,
-                        burn_in$avg_auto_f, burn_in$avg_auto_m, burn_in$avg_x_f, burn_in$avg_x_m, burn_in$avg_y_m)
+                        burn_in$avg_auto_f, burn_in$avg_auto_m, burn_in$avg_z_f, burn_in$avg_z_m, burn_in$avg_w_f)
 
 write_csv(normal_df, file_out, col_names = F)
