@@ -9,9 +9,9 @@ library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
 rep <- args[1]
-nreps <- 250
+nreps <- args[3]
 prefix <- paste("results/within/variances/rep", rep, "_", sep="")
-suffix <- "within_pheno_150000.csv"
+suffix <- args[2]
 var_file_names <- c()
 
 for(i in 1:nreps){
