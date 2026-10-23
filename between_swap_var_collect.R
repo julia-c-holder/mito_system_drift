@@ -24,7 +24,7 @@ for(i in 1:10){
   }
 }
 
-print(var_file_names[1])
+print(var_files_names[1])
 #### Collects swapped mean and variance ###
 #script for cluster
 
