@@ -48,7 +48,7 @@ swap_fn <- function(repA, repB){
 
 swapped <- swap_fn(rep1, rep2)
 
-new_file_name <- paste("results/between/swapped/rep", folder, "_", num1, "a_", num2, "m_pheno_", suffix, sep="")
+new_file_name <- paste("results/between/swapped/rep", folder, "_pop_", pop_num,"_", num1, "a_", num2, "m_pheno_", suffix, sep="")
 
 write.table(data.frame(swapped), new_file_name, sep=",", col.names=FALSE)
 
