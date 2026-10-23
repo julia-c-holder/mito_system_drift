@@ -31,9 +31,9 @@ swap_fn <- function(repA, repB){
   repB_f <- filter(repB, sex == "F")
   repB_m <- filter(repB, sex == "M")
 
-  repAa_Bm <- data.frame(sex = c(rep("F", n/2), rep("M", n/2)), auto_p = c(repA_f$auto_p, repA_m$auto_p),
-                         mito_p = c(repB_f$mito_p, repB_m$mito_p), mito_scaled_p = c(repB_f$mito_scaled_p,
-                                                                                     repB_m$mito_scaled_p))
+  repAa_Bm <- data.frame(sex = c(rep("F", n/2), rep("M", n/2)), auto_p = c(repA_f$auto, repA_m$auto),
+                         mito_p = c(repB_f$mito, repB_m$mito), mito_scaled_p = c(repB_f$mito_scaled,
+                                                                                     repB_m$mito_scaled))
   repAa_Bm <- mutate(repAa_Bm, pheno = auto_p + mito_scaled_p)
 
   ### SHOULD I DO THE RECIPROCAL CROSS? PROBABLY NO...
