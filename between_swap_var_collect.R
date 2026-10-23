@@ -15,7 +15,7 @@ suffix <- args[2]
 var_file_names <- c()
 for(i in 1:10){
   for (j in 1:10){
-    for (k in 1:(k-1)){
+    for (k in 1:(j-1)){
       new_name <- paste(prefix, "pop_", i, "_", j, "a_", k, "m_pheno", suffix, sep="")
       var_files_names <- c(var_file_names, new_name)
     }
