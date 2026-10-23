@@ -1,5 +1,5 @@
 #### Collects swapped mean and variance ###
-#script for midway
+#script for use on the cluster - I cannot say this is particularly good code
 
 #these obviously shouldn't be hardcoded - will fix in the future
 library(stringr)
@@ -7,9 +7,10 @@ library(readr)
 library(dplyr)
 
 
-args <- commandArgs(trailingOnly = TRUE)
-rep <- args[1]
-nreps <- args[3]
+args <- commandArgs(trailingOnly = TRUE) #This is the command for interpreting arguments from the bash script
+#the trailing thing means that the variables in the bash script are all after the name of the R script
+rep <- args[1] #this is the folder number in which the results were stored
+nreps <- args[3] #Excellent naming, Julia. this is the number of replicates of a given set
 prefix <- paste("results/within/variances/rep", rep, "_", sep="")
 suffix <- args[2]
 var_file_names <- c()
@@ -19,6 +20,7 @@ for(i in 1:nreps){
   var_file_names[i] <- paste(prefix, i,"_", suffix, sep="")
 }
 
+#Why the first iteration isn't just in the loop, I cannot tell you anymore! Once I believe there was a reason. maybe
 var_collector <- function(files){
   #initializing with first file
   data_mat <- matrix(nrow=nreps, ncol=6)
