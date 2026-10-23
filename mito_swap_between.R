@@ -13,17 +13,9 @@ num2 <- args[3] #second individual replicate in swap
 folder <- args[4]
 suffix <- args[5]
 
-#### For scaling version
-id_num <- args[1]
-num1 <- (2*as.integer(id_num)) - 1
-folder <- args[2]
-suffix <- args[3]
-norm_file <- args[4] ## normalization file name
 
-
-
-name_1 <- paste("results/between/", folder, "pop_", pop_num, "/mito_auto_", folder, "_", num1, "_pheno_", suffix, sep="")
-name_2 <- paste("results/between/", folder, "pop_", pop_num, "/mito_auto_", folder, "_", num2, "_pheno_", suffix, sep="")
+name_1 <- paste("results/between/", folder, "/pop_", pop_num, "/mito_auto_", folder, "_", num1, "_pheno_", suffix, sep="")
+name_2 <- paste("results/between/", folder, "/pop_", pop_num, "/mito_auto_", folder, "_", num2, "_pheno_", suffix, sep="")
 
 
 rep1 <- read_csv(name_1, col_names=T)
