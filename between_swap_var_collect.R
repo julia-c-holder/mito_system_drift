@@ -9,7 +9,7 @@ library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
 rep <- args[1]
-prefix <- paste("results/swapped/variances/rep", rep, "_", sep="")
+prefix <- paste("results/between/swapped/variances/rep", rep, "_", sep="")
 suffix <- args[2]
 
 var_file_names <- c()
