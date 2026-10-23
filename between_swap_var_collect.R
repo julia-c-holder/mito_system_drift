@@ -12,13 +12,13 @@ rep <- args[1]
 prefix <- paste("results/between/swapped/variances/rep", rep, "_", sep="")
 suffix <- args[2]
 
-var_file_names <- c()
+var_files_names <- c()
 for(i in 1:10){
   for (j in 1:10){
     k <- 1
     while(k < j){
       new_name <- paste(prefix, "pop_", i, "_", j, "a_", k, "m_pheno_", suffix, sep="")
-      var_files_names <- c(var_file_names, new_name)
+      var_files_names <- c(var_files_names, new_name)
       k <- k+1
     }
   }
@@ -62,7 +62,7 @@ var_collector <- function(files){
   return(all_df)
 }
 
-swapped_vars <- var_collector(var_file_names)
+swapped_vars <- var_collector(var_files_names)
 
 ### store output
 
