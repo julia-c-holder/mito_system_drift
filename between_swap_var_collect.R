@@ -27,7 +27,7 @@ for(i in 1:10){
 
 var_collector <- function(files){
   #initializing with first file
-  data_mat <- matrix(nrow=nreps, ncol=7)
+  data_mat <- matrix(nrow=length(files), ncol=7)
   #subsetting to the time period where recording is every 100 gens
   index = read.csv(files[1], header=F, sep=",")
   pop_lab = str_split(files[1],pattern="_")[[1]][3]
