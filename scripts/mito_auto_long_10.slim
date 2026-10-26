@@ -164,6 +164,7 @@ initialize() {
 	"cov_mito_f,cov_mito_s_f,cov_auto_f"+
 	"cov_mito_m,cov_mito_s_m,cov_auto_m"+
 	"cov_mito_auto_f,cov_mito_auto_m");
+	
 	writeFile(chrom_file, chrom_header, append=F);
 }
 
@@ -270,6 +271,13 @@ fitnessEffect() {
 		
 		allele_file = allele_file_start+sim.cycle+".csv";
 		pheno_file = pheno_file_start+sim.cycle+".csv";
+
+		if (match(sim.cycle, allele_recording_gen) >= 0){
+			writeFile(allele_file, allele_header, append=F);
+		}
+		if (match(sim.cycle, pheno_recording_gen) >= 0){
+			writeFile(pheno_file, pheno_header, append=F);
+		}
 		
 		genic_var_auto_female = 0;
 		genic_var_auto_male = 0;
