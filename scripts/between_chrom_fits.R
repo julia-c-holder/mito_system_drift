@@ -23,11 +23,11 @@ rep2 <- read_csv(name_2, col_names=F)
 
 swap_vals_fn <- function(repA, repM){
   # mean auto_f from rep A and mean mito f from rep M
-  mean_f <- repA$V2 + repM$V3
+  mean_f <- repA$X2 + repM$X3
   # mean auto_m from rep A and mean mito m from rep M
-  mean_m <- repA$V5 + repM$V6
-  var_f <- repA$V8 + repM$V9
-  var_m <- repA$V11 + repM$V12
+  mean_m <- repA$X5 + repM$X6
+  var_f <- repA$X8 + repM$X9
+  var_m <- repA$X11 + repM$X12
 
   return(data.frame(mean_f=mean_f, mean_m=mean_m, var_f=var_f, var_m=var_m))
 }
@@ -52,6 +52,6 @@ swapped_fits <- fit_thru_time(swapped_vals)
 
 out_file <- paste("results/between/swapped/chrom_fits/rep", folder, "_pop_", pop_num, "_", num1,"a_", num2,"m_chrom.csv", sep="")
 
-write.table(swapped_vals, out_file, sep=",", col.names=T)
+write.table(swapped_fits, out_file, sep=",", col.names=T)
 
 
