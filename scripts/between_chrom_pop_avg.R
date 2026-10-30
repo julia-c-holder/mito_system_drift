@@ -14,7 +14,7 @@ folder <- args[2]
 
 file_list <- c()
 
-for (j in 1:10){
+for (j in 2:10){
   for(k in 1:(j-1)){
     new_name <- paste("results/between/swapped/chrom_fits/rep", folder, "_pop_", pop_num, "_", j,"a_", k,"m_chrom.csv", sep="")
     file_list <- c(file_list, new_name)
