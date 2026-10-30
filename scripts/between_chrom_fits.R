@@ -17,8 +17,10 @@ folder <- args[4]
 
 name_1 <- paste("results/between/", folder, "/pop_", pop_num, "/mito_auto_", folder, "_", num1, "_chrom.csv", sep="")
 name_2 <- paste("results/between/", folder, "/pop_", pop_num, "/mito_auto_", folder, "_", num2, "_chrom.csv", sep="")
-
+print(name_1)
 rep1 <- read.csv(name_1, skip=1, header=F)
+print(head(rep1))
+
 rep2 <- read.csv(name_2, skip=1, header=F)
 
 swap_vals_fn <- function(repA, repM){
