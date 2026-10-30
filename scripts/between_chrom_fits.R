@@ -18,8 +18,8 @@ folder <- args[4]
 name_1 <- paste("results/between/", folder, "/pop_", pop_num, "/mito_auto_", folder, "_", num1, "_chrom.csv", sep="")
 name_2 <- paste("results/between/", folder, "/pop_", pop_num, "/mito_auto_", folder, "_", num2, "_chrom.csv", sep="")
 
-rep1 <- read_csv(name_1, col_names=F)
-rep2 <- read_csv(name_2, col_names=F)
+rep1 <- read_csv(name_1, col_names=T)
+rep2 <- read_csv(name_2, col_names=T)
 
 swap_vals_fn <- function(repA, repM){
   # mean auto_f from rep A and mean mito f from rep M
