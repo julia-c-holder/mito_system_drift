@@ -48,7 +48,9 @@ fit_thru_time <- function(data){
 }
 
 swapped_vals <- swap_vals_fn(rep1, rep2)
+print(head(swapped_vals))
 swapped_fits <- fit_thru_time(swapped_vals)
+print(head(swapped_fits))
 
 out_file <- paste("results/between/swapped/chrom_fits/rep", folder, "_pop_", pop_num, "_", num1,"a_", num2,"m_chrom.csv", sep="")
 
