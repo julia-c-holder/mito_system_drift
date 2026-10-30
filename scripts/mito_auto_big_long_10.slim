@@ -147,6 +147,25 @@ initialize() {
 	defineConstant("pheno_recording_gen", recording_gens);
 	defineConstant("allele_recording_gen", recording_gens);
 
+	defineConstant("pheno_header", "sex,auto,mito,"+
+	"mito_scaled,pheno");
+
+	defineConstant("allele_header","id,info,position,"+
+	"origin_time,freq,female_effect,male_effect");
+
+	defineConstant("chrom_header","cycle,avg_auto_f,avg_mito_f"
+	+"avg_mito_scaled_f,avg_auto_m,avg_mito_m,"+
+	"avg_mito_scaled_m,var_auto_f,var_mito_f,"+
+	"var_mito_scaled_f,var_auto_m,var_mito_m,"+
+	"var_mito_scaled_m,avg_pheno_f,avg_pheno_m"+
+	"var_pheno_f,var_pheno_m,genic_var_auto_f,"+
+	"genic_var_mito_f,genic_var_mito_s_f"+
+	"genic_var_auto_m,genic_var_mito_m,genic_var_mito_s_m"+
+	"cov_mito_f,cov_mito_s_f,cov_auto_f"+
+	"cov_mito_m,cov_mito_s_m,cov_auto_m"+
+	"cov_mito_auto_f,cov_mito_auto_m");
+
+    writeFile(chrom_file, chrom_header, append=F);
 
 }
 
@@ -253,6 +272,13 @@ fitnessEffect() {
 		
 		allele_file = allele_file_start+sim.cycle+".csv";
 		pheno_file = pheno_file_start+sim.cycle+".csv";
+
+		if (match(sim.cycle, allele_recording_gen) >= 0){
+			writeFile(allele_file, allele_header, append=F);
+		}
+		if (match(sim.cycle, pheno_recording_gen) >= 0){
+			writeFile(pheno_file, pheno_header, append=F);
+		}
 		
 		genic_var_auto_female = 0;
 		genic_var_auto_male = 0;
