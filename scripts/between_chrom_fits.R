@@ -23,7 +23,7 @@ rep2 <- read_csv(name_2, skip=1, header=F)
 
 swap_vals_fn <- function(repA, repM){
   # mean auto_f from rep A and mean mito f from rep M
-  mean_f <- repA$avg_auto_f + repM$avg_mito_f
+  mean_f <- repA$X2 + repM$X3
   # mean auto_m from rep A and mean mito m from rep M
   mean_m <- repA$X5 + repM$X6
   var_f <- repA$X8 + repM$X9
