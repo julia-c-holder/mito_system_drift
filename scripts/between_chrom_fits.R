@@ -25,11 +25,11 @@ rep2 <- read.csv(name_2, skip=1, header=F)
 
 swap_vals_fn <- function(repA, repM){
   # mean auto_f from rep A and mean mito f from rep M
-  mean_f <- repA$X2 + repM$X3
+  mean_f <- repA$V2 + repM$V3
   # mean auto_m from rep A and mean mito m from rep M
-  mean_m <- repA$X5 + repM$X6
-  var_f <- repA$X8 + repM$X9
-  var_m <- repA$X11 + repM$X12
+  mean_m <- repA$V5 + repM$V6
+  var_f <- repA$V8 + repM$V9
+  var_m <- repA$V11 + repM$V12
 
   return(data.frame(mean_f=mean_f, mean_m=mean_m, var_f=var_f, var_m=var_m))
 }
