@@ -36,6 +36,7 @@ male_df <- as.data.frame(male_mat)
 
 avg_fit_f <- rowMeans(female_df)
 avg_fit_m <- rowMeans(male_df)
+print(head(avg_fit_f))
 
 pop_avg <- data.frame("f"=avg_fit_f, "m"=avg_fit_m)
 out_file <- paste("results/between/swapped/chrom_fits/rep", folder, "_pop_", pop_num, ".csv", sep="")
