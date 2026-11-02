@@ -28,7 +28,7 @@ swap_vals_fn <- function(repA, repM){
   mean_f <- repA$V2 + repM$V3
   # mean auto_m from rep A and mean mito m from rep M
   mean_m <- repA$V5 + repM$V6
-  return(data.frame(mean_f=mean_f, mean_m=mean_m, var_f=var_f, var_m=var_m))
+  return(data.frame(mean_f=mean_f, mean_m=mean_m))
 }
 
 dumb_fit_calc <- function(val){
@@ -36,6 +36,7 @@ dumb_fit_calc <- function(val){
   return(mean_fit)
 }
 
+fit_thru_time <- function(data){
   f_data_mat <- matrix(c(data$mean_f), ncol=1)
   m_data_mat <- matrix(c(data$mean_m), ncol=1)
   f_fits <- apply(f_data_mat, 1, function(VAL) dumb_fit_calc(VAL))
