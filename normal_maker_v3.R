@@ -6,7 +6,7 @@ library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
 
-file_collected <- read.csv(args[1], skip=1, header=F)
+file_collected <- read.csv(args[1], header=F)
 file_out <- args[2]
 
 n <- nrow(file_collected)
