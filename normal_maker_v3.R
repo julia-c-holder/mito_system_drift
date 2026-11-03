@@ -15,6 +15,12 @@ m <- length(unique(file_collected$V1))*length(unique(file_collected$V25))
 if(n == m){
   no_dups <- file_collected
 }
+else{
+  print("rows")
+  print(n)
+  print("rows expected")
+  print(m)
+}
 
 burn_in <- filter(no_dups, V1==100000)
 
