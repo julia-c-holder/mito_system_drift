@@ -174,9 +174,9 @@ initialize() {
 
 mutation() { //this could be done seperately for the mitochondria
 	// draw mutational effects for new muts
-	effects = rmvnorm(1, mu, sigma);
+	effects = rnorm(1, mu, cov);
 	mut.setValue("e_f", effects[0]);
-	mut.setValue("e_m", effects[1]);
+	mut.setValue("e_m", effects[0]);
 	return T;
 }
 
