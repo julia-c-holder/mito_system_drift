@@ -110,7 +110,7 @@ initialize() {
 
 
 	// ### mutational distribution parameters ###
-	defineConstant("mu", c(0, 0)); //mean of mutation distribution male & female
+	defineConstant("mu", c(0)); //mean of mutation distribution male & female
 	defineConstant("var_u", (0.25*10^-2)); //variance in mutational effects in both sexes
 	defineConstant("cov", intersex_corr*var_u); //covariance between mutational effects in the sexes
 	defineConstant("sigma", matrix(c(var_u,cov,cov,var_u), nrow=2));
