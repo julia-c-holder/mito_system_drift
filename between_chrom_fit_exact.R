@@ -35,7 +35,7 @@ swap_vals_fn <- function(repA, repM){
 }
 
 exact_fit_calc <- function(vals){
-  exact_fit <- sqrt(1/(1+vals[2]))*exp(-(vals[1]^2)/2*(1+vals[2]))
+  exact_fit <- sqrt(1/(1+vals[2]))*exp(-(vals[1]^2)/(2*(1+vals[2])))
   return(exact_fit)
 }
 
