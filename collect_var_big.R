@@ -14,7 +14,7 @@ nreps <- args[2]
 csv_collector <- function(files){
   #initializing with first file
   #subsetting to the time period where recording is every 100 gens
-  index = read.csv(files[1], header=F, sep=",")
+  index = read.csv(files[1], skip=1, header=F, sep=",")
   cycles = index$V1
   avg_auto_f = index$V2
   avg_mito_f = index$V3
@@ -53,7 +53,7 @@ csv_collector <- function(files){
 		       cov_mito_auto_f=cov_mito_auto_f, cov_mito_auto_m=cov_mito_auto_m,
                       reps=reps)
   for(i in 2:length(files)){
-    index = read.csv(files[i], header=F, sep=",")
+    index = read.csv(files[i], skip=1, header=F, sep=",")
     #columns I will record
     cycles = index$V1
     avg_auto_f = index$V2
