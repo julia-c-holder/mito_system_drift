@@ -20,6 +20,7 @@ rep_heads <- c("sex", "auto_p", "mito_p", "mito_scaled_p", "pheno")
 normalizing_fun <- function(num, data, norm){
   ##THIS FUNCTION ASSUMES SCALING FACTOR IS 1 FOR MITOCHONDRIA --- EDIT IF CHANGING SCALING!!!
   N <- length(data$sex)
+  print(N)
   m_norm_f <- norm$X1[num] #mean female mitochondrial value at end of burn-in
   m_norm_m <- norm$X2[num]
 
@@ -70,7 +71,7 @@ print(id)
 num1 <- as.integer(id)
 file_name <- paste(prefix, id,"_pheno_", suffix, sep="")
 
-raw_file <- read.csv(file_name, skip=1, col.names = rep_heads)
+raw_file <- read.csv(file_name, col.names = rep_heads)
 norm_file <- read_csv(norm_name, col_names = FALSE)
 
 normed <- normalizing_fun(num1, raw_file, norm_file)
