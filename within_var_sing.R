@@ -70,7 +70,7 @@ print(id)
 num1 <- as.integer(id)
 file_name <- paste(prefix, id,"_pheno_", suffix, sep="")
 
-raw_file <- read_csv(file_name, col_names = rep_heads)
+raw_file <- read.csv(file_name, skip=1, col.names = rep_heads)
 norm_file <- read_csv(norm_name, col_names = FALSE)
 
 normed <- normalizing_fun(num1, raw_file, norm_file)
