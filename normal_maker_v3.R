@@ -6,20 +6,14 @@ library(dplyr)
 
 args <- commandArgs(trailingOnly = TRUE)
 
-file_collected <- read.csv(args[1], header=F)
+file_collected <- read.csv(args[1], skip=1, header=F)
 file_out <- args[2]
 
 n <- nrow(file_collected)
-m <- length(unique(file_collected$V1))*length(unique(file_collected$V25))
+m <- 1992000
 
 if(n == m){
   no_dups <- file_collected
-}
-if(n != m){
-  print("rows")
-  print(n)
-  print("rows expected")
-  print(m)
 }
 
 burn_in <- filter(no_dups, V1==100000)
