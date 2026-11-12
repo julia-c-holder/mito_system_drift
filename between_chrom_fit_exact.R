@@ -29,7 +29,7 @@ swap_vals_fn <- function(repA, repM){
   # mean auto_m from rep A and mean mito m from rep M
   mean_m <- repA$V5 + repM$V6
   var_f <- repA$V8 + repM$V9
-  var_m <- repA$V11 + repM
+  var_m <- repA$V11 + repM$V12
 
   return(data.frame(mean_f=mean_f, mean_m=mean_m, var_f=var_f, var_m=var_m))
 }
